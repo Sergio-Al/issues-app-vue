@@ -41,6 +41,8 @@ import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
 
+console.log(process.env);
+
 const essentialLinks: EssentialLinkProps[] = [
   {
     title: 'Docs',
