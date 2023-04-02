@@ -1,16 +1,34 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import MdEditor from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
 
-const isOpen = ref<boolean>(true);
+interface Props {
+  isOpen: boolean;
+  labels: string[];
+}
+
+interface Emits {
+  (e: 'onClose'): void;
+}
+
+const props = defineProps<Props>();
+const emits = defineEmits<Emits>();
+
+const isOpen = ref<boolean>(false);
 
 const title = ref<string>('');
 const body = ref<string>('');
 const labels = ref<string[]>([]);
+
+watch(props, () => {
+  isOpen.value = props.isOpen;
+});
 </script>
 
 <template>
   <div class="q-pa-md q-gutter-sm">
-    <q-dialog v-model="isOpen" position="bottom">
+    <q-dialog v-model="isOpen" position="bottom" persistent>
       <q-card style="width: 500px">
         <q-form class="q-gutter-md">
           <q-linear-progress :value="1" color="primary" />
@@ -24,6 +42,7 @@ const labels = ref<string[]>([]);
             <q-space />
             <div>
               <q-input
+                dense
                 v-model="title"
                 filled
                 type="text"
@@ -32,7 +51,8 @@ const labels = ref<string[]>([]);
                 class="q-mb-sm"
               />
               <q-select
-                :options="[]"
+                dense
+                :options="props.labels"
                 class="q-mb-sm"
                 filled
                 label="Multiple Selection"
@@ -43,10 +63,21 @@ const labels = ref<string[]>([]);
               />
 
               <!-- Markdown Editor -->
+              <md-editor
+                v-model="body"
+                placeholder="Markdown"
+                language="en-US"
+              />
             </div>
           </q-card-section>
           <q-card-actions align="left">
-            <q-btn flat label="Cancel" v-close-popup color="dark" />
+            <q-btn
+              flat
+              label="Cancel"
+              v-close-popup
+              color="dark"
+              @click="emits('onClose')"
+            />
             <!-- It's only a div with flex 1 -->
             <q-space />
             <q-btn

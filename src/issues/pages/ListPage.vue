@@ -1,15 +1,21 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import LoaderSpinner from 'src/shared/components/LoaderSpinner.vue';
 import FilterSelector from 'src/issues/components/filter-selector/FilterSelector.vue';
 import IssueList from 'src/issues/components/IssueList/IssueList.vue';
 import useIssues from '../composables/useIssues';
 import FloatingButtons from '../components/FloatingButtons.vue';
 import NewIssueDialog from '../components/NewIssueDialog.vue';
+import useLabels from '../composables/useLabels';
 
 const { issuesQuery } = useIssues();
+const { data } = useLabels();
 
-const listPageClickTemp = () => {
+const isOpen = ref<boolean>(false);
+
+const openDialog = () => {
   console.log('clickpagesss');
+  isOpen.value = true;
 };
 </script>
 
@@ -39,12 +45,17 @@ const listPageClickTemp = () => {
   <!-- FloatingButtons -->
   <FloatingButtons
     :buttons="[
-      { icon: 'add', color: 'primary', size: 'lg', action: listPageClickTemp },
+      { icon: 'add', color: 'primary', size: 'lg', action: openDialog },
     ]"
   />
 
   <!-- New issue dialog -->
-  <NewIssueDialog />
+  <NewIssueDialog
+    v-if="data"
+    :labels="data?.map((label) => label.name) || []"
+    :is-open="isOpen"
+    @on-close="isOpen = false"
+  />
 </template>
 
 <style scoped></style>
