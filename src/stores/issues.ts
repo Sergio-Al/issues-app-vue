@@ -16,7 +16,12 @@ export const useIssuesStore = defineStore('issues', () => {
     // Actions
     toggleLabel(labelName: string) {
       // TODO implement
-      throw new Error('We did not implemented this yet');
+      if (labels.value.includes(labelName)) {
+        labels.value = labels.value.filter((label) => label !== labelName);
+        return;
+      }
+
+      labels.value.push(labelName);
     },
   };
 });
