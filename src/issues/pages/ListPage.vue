@@ -4,15 +4,12 @@ import FilterSelector from 'src/issues/components/filter-selector/FilterSelector
 import IssueList from 'src/issues/components/IssueList/IssueList.vue';
 import useIssues from '../composables/useIssues';
 import FloatingButtons from '../components/FloatingButtons.vue';
+import NewIssueDialog from '../components/NewIssueDialog.vue';
 
 const { issuesQuery } = useIssues();
 
 const listPageClickTemp = () => {
   console.log('clickpagesss');
-};
-
-const listPageClickTemp2 = () => {
-  console.log('second click...');
 };
 </script>
 
@@ -43,14 +40,11 @@ const listPageClickTemp2 = () => {
   <FloatingButtons
     :buttons="[
       { icon: 'add', color: 'primary', size: 'lg', action: listPageClickTemp },
-      {
-        icon: 'navigation',
-        color: 'secondary',
-        size: 'lg',
-        action: listPageClickTemp2,
-      },
     ]"
   />
+
+  <!-- New issue dialog -->
+  <NewIssueDialog />
 </template>
 
 <style scoped></style>
